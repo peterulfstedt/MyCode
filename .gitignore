@@ -16,3 +16,6 @@ MyCProject/*.xcuserstate
 # Ignore Xcode user/project files
 MyCProject/MyCProject.xcodeproj/project.xcworkspace/
 MyCProject/MyCProject/
+MyCProject/MyCProject.xcodeproj/project.pbxproj
+MyCProject/MyCProject.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+MyCProject/MyCProject.xcodeproj/xcuserdata/peterulfstedt.xcuserdatad/xcschemes/xcschememanagement.plist
