@@ -5,17 +5,10 @@
 *.o
 *.out
 
-# Xcode user data
+# Ignore Xcode user-specific files
 MyCProject/*.xcworkspace
-MyCProject/*.xcuserdata
+MyCProject/*.xcuserdata/
 MyCProject/*.xcuserstate
 
 # Ignore one specific C file
 # MyCProject/main.c
-
-# Ignore Xcode user/project files
-MyCProject/MyCProject.xcodeproj/project.xcworkspace/
-MyCProject/MyCProject/
-MyCProject/MyCProject.xcodeproj/project.pbxproj
-MyCProject/MyCProject.xcodeproj/project.xcworkspace/contents.xcworkspacedata
-MyCProject/MyCProject.xcodeproj/xcuserdata/peterulfstedt.xcuserdatad/xcschemes/xcschememanagement.plist
