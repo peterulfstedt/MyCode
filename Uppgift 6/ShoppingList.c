@@ -120,7 +120,7 @@ void correctInterval (struct ShoppingList *list, int *trueLength){
 
 void correctAmount (struct ShoppingList *list, int number){
     do{
-        printf("Change the amount: ");
+        printf("Enter the amount: ");
         scanf("%f", &list->ShoppingList[number].amount);
         
         if (list->ShoppingList[number].amount <=0){
