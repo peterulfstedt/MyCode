@@ -4,7 +4,6 @@
 #include<string.h>
 #include<stdlib.h> // For dynamic memory (lab 7)
 
-
 void addItem(struct ShoppingList *list)
 {
     if (list->length == 5){
@@ -12,12 +11,12 @@ void addItem(struct ShoppingList *list)
         return;
     }
     printf("\nEnter name of the product: ");
-    scanf(" %[^\n]", list->ShoppingList[list->length].productName);
+    scanf(" %[^\n]", list->ItemList[list->length].productName);
     
     correctAmount(list, list->length);
         
     printf("Enter units: ");
-    scanf(" %[^\n]", list->ShoppingList[list->length].unit);
+    scanf(" %[^\n]", list->ItemList[list->length].unit);
     
     list->length++;
 }
@@ -29,13 +28,10 @@ void printList(struct ShoppingList *list)
     }else{
     printf("Your list contains %d items:\n", list->length);
         for (int i = 0; i < list->length; i++){
-            printf("%-3d-  %-25s %8.1f %s\n", i+1, list->ShoppingList[i].productName, list->ShoppingList[i].amount, list->ShoppingList[i].unit);
+            printf("%-3d-  %-25s %8.1f %s\n", i+1, list->ItemList[i].productName, list->ItemList[i].amount, list->ItemList[i].unit);
         }
     }
 }
-
-
-
 
 
 
@@ -47,11 +43,10 @@ void editItem(struct ShoppingList *list)
         int number;
         
         correctInterval(list, &number);
-        number--;
         
         correctAmount(list, number);
         
-        printf("Item %d is changed.", number);
+        printf("Item %d is changed.", number + 1);
     }
 }
 
@@ -67,26 +62,17 @@ void removeItem(struct ShoppingList *list)
     }else{
         int length1;
         correctInterval(list, &length1);
-        int originalLength = length1;
         
-        int length2=length1;
-        length1--;
-        
-        while (length1 != 4){
-            for (int i=0; i<100; i++){
-                list->ShoppingList[length1].productName[i] = list->ShoppingList[length2].productName[i];
-            }
-            list->ShoppingList[length1].amount = list->ShoppingList[length2].amount;
-            for (int i=0; i<100; i++){
-                list->ShoppingList[length1].unit[i] = list->ShoppingList[length2].unit[i];
-            }
-            length1++;
-            length2++;
-            if (length1 == 4){
-                list->length--;
-            }
+        for (int i = length1; i < list->length - 1; i++){
+            strcpy(list->ItemList[i].productName,  list->ItemList[i + 1].productName);
+            
+            list->ItemList[i].amount = list->ItemList[i + 1].amount;
+
+            strcpy(list->ItemList[i].unit,  list->ItemList[i + 1].unit);
         }
-        printf("Item %d is removed.", originalLength);
+        
+        list->length--;
+        printf("Item %d is removed.", length1 + 1);
     }
 }
 
@@ -114,6 +100,8 @@ void correctInterval (struct ShoppingList *list, int *trueLength){
         }
     }while((number > 5 || number < 1)|| number > list->length);
     
+    number--;
+    
     *trueLength = number;
 }
 
@@ -121,10 +109,10 @@ void correctInterval (struct ShoppingList *list, int *trueLength){
 void correctAmount (struct ShoppingList *list, int number){
     do{
         printf("Enter the amount: ");
-        scanf("%f", &list->ShoppingList[number].amount);
+        scanf("%f", &list->ItemList[number].amount);
         
-        if (list->ShoppingList[number].amount <=0){
+        if (list->ItemList[number].amount <=0){
             printf("The negative numbers or zero are not allowed.\n");
         }
-    }while (list->ShoppingList[number].amount <=0);
+    }while (list->ItemList[number].amount <=0);
 }

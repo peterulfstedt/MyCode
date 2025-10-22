@@ -1,16 +1,16 @@
 #ifndef SHOPPING_LIST_H
 #define SHOPPING_LIST_H
 /*Här lägger du eventuella makrodefinitioner*/
-#define size 100
+#define MAX_STRING_SIZE 100
 
 // Struct definitions
 struct GroceryItem {
-    char productName[size];
+    char productName[MAX_STRING_SIZE];
     float amount;
-    char unit [size];
+    char unit [MAX_STRING_SIZE];
 };
 struct ShoppingList {
-    struct GroceryItem ShoppingList[5];
+    struct GroceryItem ItemList[5];
     int length;
 };
 
