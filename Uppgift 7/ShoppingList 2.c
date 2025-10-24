@@ -8,14 +8,12 @@
 void correctInterval (struct ShoppingList *list, int *trueLength);
 void correctAmount (struct ShoppingList *list, int number);
 int checkEmptiness (struct ShoppingList *list);
+void memoryAllocation (struct ShoppingList *list, int capacity);
 
 //Main-function definitions
 void addItem(struct ShoppingList *list)
 {
-    if (list->length >= 5){
-        printf("\nThe limit is reached (5 Items)!");
-        return;
-    }
+    memoryAllocation (list, 1);
     printf("\nEnter name of the product: ");
     scanf(" %[^\n]", list->itemList[list->length].productName);
     
@@ -30,7 +28,6 @@ void addItem(struct ShoppingList *list)
 void printList(struct ShoppingList *list)
 {
     if (checkEmptiness(list)) return;
-    
     printf("Your list contains %d items:\n", list->length);
     for (int i = 0; i < list->length; i++){
         printf("%-3d-  %-25s %8.1f %s\n", i+1, list->itemList[i].productName, list->itemList[i].amount, list->itemList[i].unit);
@@ -43,6 +40,7 @@ void printList(struct ShoppingList *list)
 void editItem(struct ShoppingList *list)
 {
     if (checkEmptiness(list)) return;
+    
     int number;
         
     correctInterval(list, &number);
@@ -66,26 +64,55 @@ void removeItem(struct ShoppingList *list)
         
     for (int i = length1; i < list->length - 1; i++){
         strcpy(list->itemList[i].productName,  list->itemList[i + 1].productName);
-            
+        
         list->itemList[i].amount = list->itemList[i + 1].amount;
-
+        
         strcpy(list->itemList[i].unit,  list->itemList[i + 1].unit);
-        }
+    }
         
     list->length--;
     printf("Item %d is removed.", length1 + 1);
-    
 }
 
 /*saveList och loadList implementeras i laboration 7*/
 void saveList(struct ShoppingList *list)
 {
-
+    if (checkEmptiness(list)) return; //Man får inte lämna in en tom fil.
+    FILE *fpText;
+    char string[MAX_STRING_SIZE];
+    
+    printf("Choose the name of your file: ");
+    scanf(" %[^\n]", string);
+    
+    fpText = fopen(string, "w");
+    if (fpText == NULL) {
+        printf("Error: Could not create or open file '%s'\n", string);
+        return;
+    }else{
+        fprintf(fpText, "Your list contains %d items:\n", list->length);
+        for (int i=0; i < list->length; i++){
+            fprintf(fpText, "%-3d-  %-25s %8.1f %s\n", i+1, list->itemList[i].productName, list->itemList[i].amount, list->itemList[i].unit);
+        }
+        printf("File is saved!\n");
+        fclose(fpText);
+    }
 }
 
 void loadList(struct ShoppingList* list)
 {
+    FILE *fpText;
+    char string[MAX_STRING_SIZE];
+    printf("Enter the filename: ");
+    scanf(" %[^\n]", string);
     
+    fpText = fopen(string, "r");
+    if (fpText == NULL){
+        printf("There is no such file.\n");
+        fclose(fpText);
+    }else{
+        printf("1");
+        fclose(fpText);
+    }
 }
 
 //Help-function definitions
@@ -94,13 +121,13 @@ void correctInterval (struct ShoppingList *list, int *trueLength){
     do{
         printf("Give the number of the product you want to modify: ");
         scanf("%d", &number);
-        if (number < 1 || number > 5) {
-            printf("Give the number in the correct interval (1 - 5).\n");
+        if (number < 1) {
+            printf("Give the number in the correct interval.\n");
         }
         else if (number > list->length){
             printf("The slot is empty, try again.\n");
         }
-    }while((number > 5 || number < 1)|| number > list->length);
+    }while(number > list->length || number < 1);
     
     number--;
     
@@ -119,10 +146,26 @@ void correctAmount (struct ShoppingList *list, int number){
     }while (list->itemList[number].amount <=0);
 }
 
+
 int checkEmptiness (struct ShoppingList *list){
     if (list->length == 0){
         printf("\nYour list is empty.");
         return 1;
     }
     return 0;
+}
+
+void memoryAllocation (struct ShoppingList *list, int capacity){
+    if (list->itemList == NULL){
+        list->itemList = (struct GroceryItem*)calloc(capacity, sizeof(struct GroceryItem));
+        
+    }else{
+        capacity++;
+        struct GroceryItem *temp = realloc(list->itemList, capacity * sizeof(struct GroceryItem));
+        if (!temp){
+            printf("Could not expand memory!\n");
+            return;
+        }
+        list->itemList = temp;
+    }
 }

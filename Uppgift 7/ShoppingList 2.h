@@ -12,7 +12,7 @@ struct GroceryItem {
 };
 
 struct ShoppingList {
-    struct GroceryItem itemList[5];
+    struct GroceryItem *itemList;
     int length;
 };
 
